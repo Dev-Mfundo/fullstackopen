@@ -4,7 +4,7 @@ const Header=({title})=>{
     <h1>{title}</h1>
   )
 }
-const Content=({parts})=>{
+const Part=({parts})=>{
   return(
     <>
       <p>{parts[0].name} {parts[0].exercises}</p>
@@ -43,7 +43,7 @@ const App = () => {
   return (
     <div>
       <Header title={course.name}/>
-      <Content parts={course.parts}/>
+      <Part parts={course.parts}/>
       <Total exercises={course.parts}/>
     </div>
   )
