@@ -14,6 +14,9 @@ const App = () => {
     .getAll()
     .then(initialPerson=>{
       setPersons(initialPerson)
+    }).catch((error)=>{
+      console.log("Fetching Error", error)
+      alert("Failed to fetch from database")
     })
   },[])
   const handleFilter=(e)=>{
