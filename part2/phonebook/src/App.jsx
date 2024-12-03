@@ -86,8 +86,9 @@ const App = () => {
   };
 
 
-  const filteredPersons = persons.filter((person)=>person.name.toLowerCase().includes(filterName.name.toLowerCase()))
-
+const filteredPersons = persons.filter((person) =>
+    person?.name?.toLowerCase().includes(filterName.name?.toLowerCase() || "")
+  );
   const handleRemove=(id)=>{
     const personToRemove = persons.find((person) => person.id === id);
     if (personToRemove && window.confirm(`Delete ${personToRemove.name}?`)) {
