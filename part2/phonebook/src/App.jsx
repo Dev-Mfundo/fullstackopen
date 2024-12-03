@@ -3,12 +3,13 @@ import personService from './component/services/person'
 import Filter from './component/Filter'
 import PersonForm from './component/PersonForm'
 import Persons from './component/Persons'
+import Feedback from './component/Feedback'
 
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState({name:'',number: ''})
   const [filterName,setFilterName]=useState({name:''})
-
+  const [message,setMessage]=useState({content: '',success: ''})
   useEffect(()=>{
     personService
     .getAll()
@@ -74,6 +75,11 @@ const App = () => {
     }else{
       personService.create(newName).then((newPerson)=>{
         setPersons([...persons, newPerson]);
+        const addingStmt= `Added ${newName.name}`;
+        setMessage({ content:addingStmt, success: true});
+        setTimeout(()=>{
+        setMessage(message.content);
+        },5000)
         setNewName({ name: "", number: "" });
       });
     }
@@ -91,16 +97,24 @@ const App = () => {
       setPersons(persons.filter((person)=> person.id !== id));
       })
       .catch((error)=>{
-        console.error("Error removing person:", error);
-        alert("Failed to delete the entry. Please try again.");
+        const deleteFail= `Information of ${personToRemove.name} has already been removed from server`;
+        
+        if(error.status === 404){
+        setMessage({ content:deleteFail, success: false});
+        setTimeout(()=>{
+          setMessage({content: '', success: ''})
+        }, 5000)
+      }else{
+      alert("Failed to delete the entry. Please try again.");
+      }
       });
     }
 };
 
-
   return(
     <div>
-      <h2>Phonebook</h2>
+      <h2>Phonebook </h2>
+      <Feedback message={message}/>
       <Filter handleFilter={handleFilter} filterName={filterName}/>
       <h2>add a new</h2>
       <PersonForm handleChange={handleChange} handleSubmit={handleSubmit} newName={newName} />
