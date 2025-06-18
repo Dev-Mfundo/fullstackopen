@@ -4,7 +4,7 @@ const Heading=({title})=><h1>{title}</h1>
 
 const Button=({text, onClick})=><button onClick={onClick}>{text}</button>
 
-const Statistic =({type,text})=><h5>{text} {type}</h5>
+const StatisticLine =({value,text})=><h5>{text} {value}</h5>
 
 const Statistics =({bad,good,neutral})=>{
     
@@ -16,12 +16,12 @@ const Statistics =({bad,good,neutral})=>{
 	}
 	return(
 	<>
-	<Statistic type={good} text='good'/>
-	<Statistic type={neutral} text='neutral'/>
-	<Statistic type={bad} text='bad'/>
-	<Statistic type={total} text='all'/>
-	<Statistic type={average} text='average'/>
-	<Statistic type={positive} text='positive'/>
+	<StatisticLine value={good} text='good'/>
+	<StatisticLine value={neutral} text='neutral'/>
+	<StatisticLine value={bad} text='bad'/>
+	<StatisticLine value={total} text='all'/>
+	<StatisticLine value={average.toFixed(1)} text='average'/>
+	<StatisticLine value={positive.toFixed(1)} text='positive'/>
     </>
 	)
 }
