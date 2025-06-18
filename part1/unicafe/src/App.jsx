@@ -4,7 +4,27 @@ const Heading=({title})=><h1>{title}</h1>
 
 const Button=({text, onClick})=><button onClick={onClick}>{text}</button>
 
-const Results=({type,text})=><h5>{text} {type}</h5>
+const Statistic =({type,text})=><h5>{text} {type}</h5>
+
+const Statistics =({bad,good,neutral})=>{
+    
+	const total = bad + good + neutral
+	const average= total? (good-bad)/total: 0;
+	const positive= total ? (good / total) * 100 : 0
+	if(total ===0){
+		return <p>No feedback given</p>
+	}
+	return(
+	<>
+	<Statistic type={good} text='good'/>
+	<Statistic type={neutral} text='neutral'/>
+	<Statistic type={bad} text='bad'/>
+	<Statistic type={total} text='all'/>
+	<Statistic type={average} text='average'/>
+	<Statistic type={positive} text='positive'/>
+    </>
+	)
+}
 
 const App = () => {
   const [good, setGood] = useState(0)
@@ -30,9 +50,7 @@ const App = () => {
 	  <Button text='neutral' onClick={handleNeutral}/>
 	  <Button text='bad' onClick={handleBad}/>
 	  <Heading title='statistics'/>
-	  <Results type={good} text='good'/>
-	  <Results type={neutral} text='neutral'/>
-	  <Results type={bad} text='bad'/>
+	  <Statistics bad={bad} good={good} neutral={neutral}/>
     </div>
   )
 }
