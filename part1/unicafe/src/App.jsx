@@ -4,24 +4,26 @@ const Heading=({title})=><h1>{title}</h1>
 
 const Button=({text, onClick})=><button onClick={onClick}>{text}</button>
 
-const StatisticLine =({value,text})=><h5>{text} {value}</h5>
+const StatisticLine =({value,text})=><tr><td>{text}</td><td>{value}</td></tr>
 
 const Statistics =({bad,good,neutral})=>{
     
 	const total = bad + good + neutral
 	const average= total? (good-bad)/total: 0;
 	const positive= total ? (good / total) * 100 : 0
-	if(total ===0){
-		return <p>No feedback given</p>
-	}
+	if(total ===0)return <p>No feedback given</p>
 	return(
 	<>
+	<table>
+    <tbody>
 	<StatisticLine value={good} text='good'/>
 	<StatisticLine value={neutral} text='neutral'/>
 	<StatisticLine value={bad} text='bad'/>
 	<StatisticLine value={total} text='all'/>
 	<StatisticLine value={average.toFixed(1)} text='average'/>
 	<StatisticLine value={positive.toFixed(1)} text='positive'/>
+	</tbody>
+	</table>
     </>
 	)
 }
