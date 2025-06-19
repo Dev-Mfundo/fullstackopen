@@ -6,7 +6,7 @@ const Content=({heading,anecdotes,selected,votes})=>{
 	<>
 	<h2>{heading}</h2>
 	{anecdotes[selected]}
-	<p>has {votes[selected]} votes</p>
+	<div>has {votes[selected]} votes</div>
 	</>
 	)
 }
