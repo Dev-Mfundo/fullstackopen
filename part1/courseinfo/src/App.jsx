@@ -30,6 +30,15 @@ const Total=({parts})=>{
 	)
 }
 
+const Course =({course})=>{
+	return(
+	<>
+      <Header course={course.name}/>
+      <Content parts={course.parts}/>
+      <Total parts={course.parts}/>
+    </>
+	)	
+}
 
 const App = () => {
   const course = {
@@ -52,9 +61,7 @@ const App = () => {
 
   return (
     <div>
-      <Header course={course.name}/>
-      <Content parts={course.parts}/>
-      <Total parts={course.parts}/>
+	<Course course={course}/>
     </div>
   )
 }
