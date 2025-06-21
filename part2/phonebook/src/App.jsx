@@ -15,6 +15,10 @@ const App = () => {
 
   const handleSave=(e)=>{
   	e.preventDefault()
+  	if(!newName || !newNumber){
+  		alert("Fill in all fields!")
+  		return
+  	}
     const newPerson ={
     	name: newName,
     	number: newNumber
