@@ -10,10 +10,18 @@ const App = () => {
   	const {value} = e.target
   	setNewName(value)
   }
+  const handleSave=(e)=>{
+  	e.preventDefault()
+    const person ={
+    	name: newName
+    }
+  	setPersons(persons.concat(person))
+  	setNewName("")
+  }
   return (
     <div>
       <h2>Phonebook</h2>
-      <form>
+      <form  onSubmit={handleSave}>
         <div>
           name: <input id="name" placeholder="name" onChange={handleChange} value={newName}/>
         </div>
@@ -22,7 +30,7 @@ const App = () => {
         </div>
       </form>
       <h2>Numbers</h2>
-      <div>debug: {newName}</div>
+      {persons.map((person)=>(<p key={person.name}>{person.name}</p>))}
     </div>
   )
 }
