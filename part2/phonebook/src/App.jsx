@@ -21,7 +21,6 @@ const App = () => {
   }
   const filterContacts=(persons,searcher)=>{
   	const filterOut=persons.filter((person)=>person.name.toLowerCase().includes(searcher.toLowerCase()))
-  	console.log(filterOut)
   	return filterOut
   }
    const filtered = filterContacts(persons,searcher)
@@ -33,7 +32,8 @@ const App = () => {
   	}
     const newPerson ={
     	name: newName,
-    	number: newNumber
+    	number: newNumber,
+    	id: persons.length + 1
     }
 
     const check = persons.some((person)=>person.name.toLowerCase() === newPerson.name.toLowerCase())
