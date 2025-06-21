@@ -8,15 +8,23 @@ const App = () => {
   const handleChange=(e)=>{
   	e.preventDefault()
   	const {value} = e.target
-  	setNewName(value)
+  	setNewName(value.trim())
   }
+
   const handleSave=(e)=>{
   	e.preventDefault()
-    const person ={
+    const newPerson ={
     	name: newName
     }
-  	setPersons(persons.concat(person))
-  	setNewName("")
+
+    const check = persons.some((person)=>person.name.toLowerCase() === newPerson.name.toLowerCase())
+    if(check){
+  		alert(`${newPerson.name} is already added to phonebook`)
+    	return 
+    }
+
+  	setPersons(persons.concat(newPerson))
+   	setNewName("")
   }
   return (
     <div>
