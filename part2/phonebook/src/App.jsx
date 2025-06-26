@@ -47,6 +47,7 @@ const App = () => {
           setNewName("")
           setNewNumber("")
         })
+        .catch(err=>alert(`Failed to update ${check.name}'s number`))
         return
     }
 
@@ -57,6 +58,7 @@ const App = () => {
       setNewName("")
       setNewNumber("")
     })
+    .catch(err=>alert(`Failed to add ${newPerson.name}`))
   }
   
   const handleDelete=(id)=>{
@@ -65,6 +67,7 @@ const App = () => {
     phonebookServices
     .deleteContact(id)
     .then(()=>setPersons(persons.filter((person)=>person.id !== id)))
+    .catch(err=>alert(`Failed to delete ${currentPerson.name}`))
   }
 
   return (
