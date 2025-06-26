@@ -21,7 +21,7 @@ const App = () => {
   	e.preventDefault()
   	const {name,value} = e.target
   	if(name==="name")setNewName(value.trim())
-  	if(name==="phone-number")setNewNumber(value.trim().replaceAll(' ', '-'))
+  	if(name==="phone-number")setNewNumber(value.trim())
   	if(name==="search")setSearcher(value.trim())
   }
 
@@ -32,16 +32,24 @@ const App = () => {
   		alert("Fill in all fields!")
   		return
   	}
+
     const newPerson ={
-    	name: newName,
-    	number: newNumber
+    	name: newName.trim(),
+    	number: newNumber.trim()
+    }
+    const check = persons.find((person)=>person.name.toLowerCase() === newPerson.name.toLowerCase())
+    if(check && window.confirm(`${newPerson.name} is already added to phonebook, replace the old number with a new one?`)){
+        const updatePerson = {...check, number:newNumber}
+        phonebookServices
+        .updateContact(check.id,updatePerson)
+        .then(res=>{
+          setPersons(persons.map(person=>person.id === res.id ? res: person))
+          setNewName("")
+          setNewNumber("")
+        })
+        return
     }
 
-    const check = persons.some((person)=>person.name.toLowerCase() === newPerson.name.toLowerCase())
-    if(check){
-  		alert(`${newPerson.name} is already added to phonebook`)
-    	return 
-    }
     phonebookServices
     .create(newPerson)
     .then((newData)=>{
@@ -50,6 +58,15 @@ const App = () => {
       setNewNumber("")
     })
   }
+  
+  const handleDelete=(id)=>{
+    const currentPerson = persons.find(person=>person.id===id? person : null)
+    if(!window.confirm(`Delete ${currentPerson.name} ?`))return
+    phonebookServices
+    .deleteContact(id)
+    .then(()=>setPersons(persons.filter((person)=>person.id !== id)))
+  }
+
   return (
     <div>
       <h2>Phonebook</h2>
@@ -59,7 +76,7 @@ const App = () => {
       <PersonForm onSubmit={handleSave} onChange={handleChange} nameValue={newName} numberValue={newNumber}/>
       
       <h3>Numbers</h3>
-      <Persons  filtered={filtered}/>
+      <Persons  filtered={filtered} handleDelete={handleDelete}/>
     </div>
   )
 }
