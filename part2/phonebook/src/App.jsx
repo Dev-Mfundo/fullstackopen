@@ -3,6 +3,7 @@ import phonebookServices from './services/phonebook.js'
 import Persons from './components/Persons'
 import PersonForm from './components/PersonForm'
 import Filter from './components/Filter'
+import Noification from './components/Notification'
 
 
 const App = () => {
@@ -10,6 +11,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [searcher, setSearcher] = useState('')
+  const [message, setMessage] = useState(null)
 
   useEffect(()=>{
     phonebookServices
@@ -38,25 +40,34 @@ const App = () => {
     	number: newNumber.trim()
     }
     const check = persons.find((person)=>person.name.toLowerCase() === newPerson.name.toLowerCase())
-    if(check && window.confirm(`${newPerson.name} is already added to phonebook, replace the old number with a new one?`)){
+    if(check){
+    if(window.confirm(`${newPerson.name} is already added to phonebook, replace the old number with a new one?`)){
         const updatePerson = {...check, number:newNumber}
         phonebookServices
         .updateContact(check.id,updatePerson)
         .then(res=>{
           setPersons(persons.map(person=>person.id === res.id ? res: person))
+          setMessage(`Updated ${newPerson.name}`)
           setNewName("")
           setNewNumber("")
+          setTimeout(()=>{
+            setMessage(null)
+          },3000)
         })
         .catch(err=>alert(`Failed to update ${check.name}'s number`))
-        return
     }
-
+     return
+  }
     phonebookServices
     .create(newPerson)
     .then((newData)=>{
       setPersons(persons.concat(newData))
+      setMessage(`Added ${newPerson.name}`)
       setNewName("")
       setNewNumber("")
+      setTimeout(()=>{
+            setMessage(null)
+      },3000)
     })
     .catch(err=>alert(`Failed to add ${newPerson.name}`))
   }
@@ -73,6 +84,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Noification message={message}/>
       <Filter onChange={handleChange} value={searcher}/>
  
       <h3>add a new</h3>
