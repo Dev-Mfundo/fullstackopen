@@ -3,7 +3,7 @@ import phonebookServices from './services/phonebook.js'
 import Persons from './components/Persons'
 import PersonForm from './components/PersonForm'
 import Filter from './components/Filter'
-import Noification from './components/Notification'
+import Notification from './components/Notification'
 
 
 const App = () => {
@@ -139,7 +139,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Noification message={message}/>
+      <Notification message={message}/>
       <Filter onChange={handleChange} value={searcher}/>
  
       <h3>add a new</h3>

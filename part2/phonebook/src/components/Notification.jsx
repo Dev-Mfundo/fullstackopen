@@ -9,6 +9,7 @@ const Notification=({message})=>{
 		notification=message.error
 		return<div className="error-message">{notification}</div>
 	}
+	return null
 }
 
 export default Notification
