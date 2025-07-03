@@ -1,10 +1,14 @@
 const Notification=({message})=>{
+	let notification;
 	if(message===null)return
-	return(
-		<>
-		<div class="success-message">{message}</div>
-		</>
-		)
+	if(message.success){
+		notification=message.success
+		return <div className="success-message">{notification}</div>
+	}
+	if(message.error){
+		notification=message.error
+		return<div className="error-message">{notification}</div>
+	}
 }
 
 export default Notification

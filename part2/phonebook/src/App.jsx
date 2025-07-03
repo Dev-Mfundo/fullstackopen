@@ -17,6 +17,12 @@ const App = () => {
     phonebookServices
     .getAll()
     .then((initialPhonebook)=>setPersons(initialPhonebook))
+    .catch((err)=>{
+
+      setMessage({
+        error: 'Failed to get contacts'
+      })
+    })
   },[])
 
   const handleChange=(e)=>{
@@ -31,7 +37,12 @@ const App = () => {
   const handleSave=(e)=>{
   	e.preventDefault()
   	if(!newName || !newNumber){
-  		alert("Fill in all fields!")
+  		setMessage({
+        error:"Fill in all fields!"
+      })
+      setTimeout(()=>{
+      setMessage(null)
+      },3000)
   		return
   	}
 
@@ -47,14 +58,32 @@ const App = () => {
         .updateContact(check.id,updatePerson)
         .then(res=>{
           setPersons(persons.map(person=>person.id === res.id ? res: person))
-          setMessage(`Updated ${newPerson.name}`)
+          setMessage({
+            success:`Updated ${newPerson.name}`
+          })
           setNewName("")
           setNewNumber("")
           setTimeout(()=>{
-            setMessage(null)
+          setMessage(null)
           },3000)
         })
-        .catch(err=>alert(`Failed to update ${check.name}'s number`))
+        .catch((err)=>{
+          if (err.response && err.response.status === 404) {
+          setMessage({
+          error: `Information of ${check.name} has already been removed from the server`
+          })
+          }else{
+            setMessage({
+            error:`Failed to update ${check.name}'s number`
+          })
+          }
+          setTimeout(()=>{
+            setMessage(null)
+          },3000)
+          setNewName("")
+          setNewNumber("")
+
+        })
     }
      return
   }
@@ -62,23 +91,49 @@ const App = () => {
     .create(newPerson)
     .then((newData)=>{
       setPersons(persons.concat(newData))
-      setMessage(`Added ${newPerson.name}`)
+      setMessage({
+        success:`Added ${newPerson.name}`
+      })
       setNewName("")
       setNewNumber("")
       setTimeout(()=>{
-            setMessage(null)
+      setMessage(null)
       },3000)
     })
-    .catch(err=>alert(`Failed to add ${newPerson.name}`))
+    .catch(err=>{
+      setMessage({
+        error:`Failed to add ${newPerson.name}`
+      })
+      setNewName("")
+      setNewNumber("")
+      setTimeout(()=>{
+      setMessage(null)
+      },3000)
+    })
   }
-  
+
   const handleDelete=(id)=>{
     const currentPerson = persons.find(person=>person.id===id? person : null)
     if(!window.confirm(`Delete ${currentPerson.name} ?`))return
     phonebookServices
     .deleteContact(id)
-    .then(()=>setPersons(persons.filter((person)=>person.id !== id)))
-    .catch(err=>alert(`Failed to delete ${currentPerson.name}`))
+    .then(()=>{
+      setPersons(persons.filter((person)=>person.id !== id))
+      setMessage({
+        success: `Deleted ${currentPerson.name} successfully`
+        })
+      setTimeout(()=>{
+      setMessage(null)
+      },3000)
+    })
+    .catch(err=>{
+      setMessage({
+        error:`Information of ${currentPerson.name} has already been removed from the server`
+      })
+      setTimeout(()=>{
+      setMessage(null)
+      },3000)
+    })
   }
 
   return (
