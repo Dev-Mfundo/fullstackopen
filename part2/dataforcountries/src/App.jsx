@@ -2,11 +2,13 @@ import {useState,useEffect} from 'react'
 import services from './components/services/api_services.jsx'
 import DisplayResults from './components/DisplayResults.jsx'
 import Form from './components/Form.jsx'
+import Notification from './components/Notification.jsx'
 
 const App=()=>{
   const [country, setCountry] = useState("")
   const [countries, setCountries] = useState([])
   const [message, setMessage] = useState("")
+
 
   useEffect(()=>{
     services.getCountries()
@@ -26,6 +28,7 @@ const App=()=>{
   return(
     <>
     <Form country={country} handleChange={handleChange}/>
+    <Notification message={message}/>
     <DisplayResults country={country} countries={countries}/>
     </>
     )

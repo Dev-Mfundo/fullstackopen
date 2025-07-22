@@ -1,5 +1,12 @@
+import {useState} from 'react'
+
 const DisplayResults=({country,countries})=>{
+  const [visibility, setVisibility] = useState(null)
+
   const filteredData=countries.filter((item)=>item.name.common.toLowerCase().includes(country.toLowerCase()))
+
+  const handleVisibility=()=>{}
+
   const searchResults=()=>{
   if(!country){
     return null
