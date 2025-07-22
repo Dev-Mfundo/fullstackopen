@@ -27,7 +27,7 @@ const App=()=>{
 
   return(
     <>
-    <Form country={country} handleChange={handleChange}/>
+    <Form country={country} setCountry={setCountry}/>
     <Notification message={message}/>
     <DisplayResults country={country} countries={countries}/>
     </>
