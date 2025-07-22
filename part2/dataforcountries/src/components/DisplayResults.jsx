@@ -13,7 +13,7 @@ const DisplayResults=({country,countries})=>{
     return (
       <>
         {filteredData.map(item => (
-          <p key={item.name.common}>{item.name.common}</p>
+          <p key={item.name.common}>{item.name.common} <button>Show</button></p>
         ))}
       </>
     )
