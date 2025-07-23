@@ -9,20 +9,17 @@ const App=()=>{
   const [countries, setCountries] = useState([])
   const [message, setMessage] = useState("")
 
-
   useEffect(()=>{
+    if(country.trim() !== ""){
     services.getCountries()
     .then((res)=>{
       setCountries(res.data)
     }).catch((err)=>{
       setMessage("Failed to fetch data")
+      setCountries([])
     })
-  },[])
-  
-  const handleChange=(e)=>{
-    const {id, value} = e.target
-    setCountry(value)
   }
+  },[country])
   
 
   return(

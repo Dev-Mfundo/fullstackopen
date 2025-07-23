@@ -1,7 +1,6 @@
 const Form=({country,setCountry})=>{
 	const handleChange=(e)=>{
-    const {id, value} = e.target
-    setCountry(value)
+    setCountry(e.target.value)
   }
 	return(
 	<>
