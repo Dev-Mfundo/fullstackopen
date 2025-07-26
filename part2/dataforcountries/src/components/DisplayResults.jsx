@@ -30,7 +30,6 @@ const DisplayResults=({country,countries})=>{
 
 
   const renderCountry=(country)=>{
-    console.log(typeof country.capital)
     return(
       <div>
         <h2>{country.name.common}</h2>
