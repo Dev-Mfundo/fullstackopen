@@ -30,10 +30,14 @@ const DisplayResults=({country,countries})=>{
 
 
   const renderCountry=(country)=>{
+    console.log(typeof country.capital)
     return(
       <div>
         <h2>{country.name.common}</h2>
-        <p>Capital {country.capital}</p>
+        <p>Capital: {country.capital.length === 1 
+          ? country.capital[0] 
+          : country.capital.join(', ')}
+        </p>
         <p>Area {country.area}</p>
         <h2>Languages</h2>
         <ul>{Object.values(country.languages).map((language)=><li key={language}>{language}</li>)}</ul>
