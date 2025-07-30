@@ -1,6 +1,6 @@
 const express = require('express')
 const dotenv = require('dotenv')
-const {persons} = require('./persons')
+const {persons} = require('./db/persons')
 
 dotenv.config()
 const app = express()
@@ -9,7 +9,7 @@ app.use(express.json())
 
 app.get('/api/persons', (req,res)=>{
 	if(!persons || persons.length === 0){
-		return res.status(404).json({error: "Persons not found"})
+		return res.status(404).json({error: "persons not found"})
 	}
 	res.status(200).json(persons)
 })
@@ -17,17 +17,36 @@ app.get('/api/persons', (req,res)=>{
 app.get('/api/persons/:id',(req,res)=>{
 	const id = req.params.id
 	const person = persons.find(person=>person.id===id)
-	if(!person)return res.status(404).json({error: "Person not found"})
+	if(!person)return res.status(404).json({error: "person not found"})
 	res.status(200).json(person)
 })
 
 app.delete('/api/persons/:id',(req,res)=>{
 	const id = req.params.id
 	const index = persons.findIndex(person=>person.id===id)
-	if(index === -1)return res.status(401).json({error: "Failed to delete"})
+	if(index === -1)return res.status(401).json({error: "failed to delete"})
 	persons.splice(index,1)
 	res.status(204).end()
 
+})
+
+app.post('/api/persons',(req,res)=>{
+	const randomId = Math.floor(Math.random()*1000)
+	const person = req.body
+	if(!person.name)return res.status(400).json({error: "name input required"})
+	if(!person.number)return res.status(400).json({error: "number input required"})
+
+    const checkExist= persons.some(p=>p.name === person.name)
+	if(checkExist)return res.status(409).json({ error: "name must be unique"})
+
+	const newPerson = {
+		id: String(randomId),
+		name: person.name,
+		number: person.number
+	}
+
+	persons.push(newPerson)
+	res.status(201).json(newPerson)
 })
 
 app.get('/info',(req,res)=>{
