@@ -14,6 +14,19 @@ app.get('/api/persons', (req,res)=>{
 	res.status(200).json(persons)
 })
 
+
+app.get('/info',(req,res)=>{
+	const numberOfPeople = persons.length
+	const currentDate = new Date()
+	const infoText= `
+Phonebook has info for ${numberOfPeople} people
+${currentDate}`;
+	res.set('Content-Type', 'text/plain')
+	res.send(infoText)
+})
+
+
+
 const PORT = process.env.PORT || 3001
 
 app.listen(PORT,()=>{
