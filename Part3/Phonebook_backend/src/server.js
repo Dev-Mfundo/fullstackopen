@@ -1,13 +1,28 @@
 const express = require('express')
-const dotenv = require('dotenv')
+const morgan = require('morgan')
 const {persons} = require('./db/persons')
 
-dotenv.config()
 const app = express()
 app.use(express.json())
 
+app.use((req, res, next)=>{
+  const originalSend = res.send
+  res.send = function(body){
+    res.locals.body = body
+    return originalSend.call(this, body)
+  }
+  next()
+})
 
-app.get('/api/persons', (req,res)=>{
+morgan.token('res-body', (req, res)=>{
+  return res.locals.body ? String(res.locals.body) : '';
+})
+
+app.use(morgan(
+  ':method :url :status :res[content-length] - :response-time ms :res-body'
+))
+
+app.get('/api/persons',(req,res)=>{
 	if(!persons || persons.length === 0){
 		return res.status(404).json({error: "persons not found"})
 	}
@@ -52,8 +67,8 @@ app.post('/api/persons',(req,res)=>{
 app.get('/info',(req,res)=>{
 	const numberOfPeople = persons.length
 	const currentDate = new Date()
-	const infoText= `
-Phonebook has info for ${numberOfPeople} people
+	const infoText=
+`Phonebook has info for ${numberOfPeople} people
 ${currentDate}`;
 	res.set('Content-Type', 'text/plain')
 	res.send(infoText)
