@@ -1,12 +1,14 @@
 const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
+const dotenv = require('dotenv')
 const {persons} = require('./db/persons')
 
 
 const app = express()
 app.use(express.json())
-
+dotenv.config()
+app.use(dotenv)
 const corsOrigin={
 	origin: "https://phonebook-frontend-gvjh.onrender.com",
 	methods: ["GET","POST","DELETE"],
@@ -86,7 +88,7 @@ ${currentDate}`;
 
 
 
-const PORT = 3001
+const PORT = process.env.PORT || 3001
 
 app.listen(PORT,()=>{
 	console.log(`Server running on port: ${PORT}`)
