@@ -1,9 +1,19 @@
 const express = require('express')
 const morgan = require('morgan')
+const cors = require('cors')
 const {persons} = require('./db/persons')
+
 
 const app = express()
 app.use(express.json())
+
+const corsOrigin={
+	origin: " http://localhost:5173",
+	methods: ["GET","POST","DELETE"],
+	credentails: true
+}
+
+app.use(cors(corsOrigin))
 
 app.use((req, res, next)=>{
   const originalSend = res.send
