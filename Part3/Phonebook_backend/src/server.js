@@ -8,7 +8,7 @@ const app = express()
 app.use(express.json())
 
 const corsOrigin={
-	origin: " http://localhost:5173",
+	origin: "https://phonebook-frontend-gvjh.onrender.com",
 	methods: ["GET","POST","DELETE"],
 	credentails: true
 }
