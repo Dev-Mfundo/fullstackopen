@@ -1,12 +1,12 @@
 import axios from 'axios'
 
-const getAll=()=>axios.get('http://localhost:3001/api/persons').then(res=>res.data)
+const getAll=()=>axios.get('/api/persons').then(res=>res.data)
 
-const create=(object)=>axios.post('http://localhost:3001/api/persons', object).then(res=>res.data)
+const create=(object)=>axios.post('/api/persons', object).then(res=>res.data)
 
-const deleteContact=(id)=>axios.delete(`http://localhost:3001/api/persons/${id}`)
+const deleteContact=(id)=>axios.delete(`/api/persons/${id}`)
 
-const updateContact=(id, object)=>axios.put(`http://localhost:3001/api/persons/${id}`, object).then(res=>res.data)
+const updateContact=(id, object)=>axios.put(`/api/persons/${id}`, object).then(res=>res.data)
 export default {
     getAll: getAll,
     create: create,
