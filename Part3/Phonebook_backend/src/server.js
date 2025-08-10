@@ -4,16 +4,17 @@ const cors = require('cors')
 const dotenv = require('dotenv')
 const {persons} = require('./db/persons')
 
+dotenv.config()
 
 const app = express()
 app.use(express.json())
-dotenv.config()
 app.use(dotenv)
+
 
 const corsOrigin={
 	origin: "https://phonebook-frontend-gvjh.onrender.com",
 	methods: ["GET","POST","DELETE"],
-	credentails: true
+	credentials: true
 }
 
 app.use(cors(corsOrigin))
