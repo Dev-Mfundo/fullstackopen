@@ -18,7 +18,7 @@ const App = () => {
     .getAll()
     .then((initialPhonebook)=>setPersons(initialPhonebook))
     .catch((err)=>{
-
+      setPersons([])
       setMessage({
         error: 'Failed to get contacts'
       })
