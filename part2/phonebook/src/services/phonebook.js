@@ -1,12 +1,14 @@
 import axios from 'axios'
 
-const getAll=()=>axios.get('/api/persons').then(res=>res.data)
+const baseUrl = 'https://phonebook-backend-p60v.onrender.com'
 
-const create=(object)=>axios.post('/api/persons', object).then(res=>res.data)
+const getAll=()=>axios.get(`${baseUrl}/api/persons`).then(res=>res.data)
 
-const deleteContact=(id)=>axios.delete(`/api/persons/${id}`)
+const create=(object)=>axios.post(`${baseUrl}/api/persons`, object).then(res=>res.data)
 
-const updateContact=(id, object)=>axios.put(`/api/persons/${id}`, object).then(res=>res.data)
+const deleteContact=(id)=>axios.delete(`${baseUrl}/api/persons/${id}`)
+
+const updateContact=(id, object)=>axios.put(`${baseUrl}/api/persons/${id}`, object).then(res=>res.data)
 export default {
     getAll: getAll,
     create: create,
