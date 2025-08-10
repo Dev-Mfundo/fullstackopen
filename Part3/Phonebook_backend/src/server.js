@@ -12,7 +12,7 @@ app.use(dotenv)
 const corsOrigin={
 	origin: "https://phonebook-frontend-gvjh.onrender.com",
 	methods: ["GET","POST","DELETE"],
-	credentails: true
+	credentials: false
 }
 
 app.use(cors(corsOrigin))
