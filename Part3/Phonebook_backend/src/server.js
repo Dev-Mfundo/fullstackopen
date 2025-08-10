@@ -1,6 +1,5 @@
 const express = require('express')
 const morgan = require('morgan')
-const cors = require('cors')
 const dotenv = require('dotenv')
 const {persons} = require('./db/persons')
 
@@ -11,13 +10,6 @@ app.use(express.json())
 
 app.use(express.static('dist'))
 
-const corsOrigin={
-	origin: "https://phonebook-frontend-gvjh.onrender.com",
-	methods: ["GET","POST","DELETE"],
-	credentials: true
-}
-
-app.use(cors(corsOrigin))
 
 app.use((req, res, next)=>{
   const originalSend = res.send
