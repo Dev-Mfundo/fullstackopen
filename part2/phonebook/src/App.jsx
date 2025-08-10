@@ -33,7 +33,7 @@ const App = () => {
   	if(name==="search")setSearcher(value.trim())
   }
 
-  const filtered = searcher ? persons.filter((person)=>person.name.toLowerCase().includes(searcher.toLowerCase())) : persons
+
   const handleSave=(e)=>{
   	e.preventDefault()
   	if(!newName || !newNumber){
@@ -135,7 +135,7 @@ const App = () => {
       },3000)
     })
   }
-
+  const filtered = searcher ? persons.filter((person)=>person.name.toLowerCase().includes(searcher.toLowerCase())) : persons
   return (
     <div>
       <h2>Phonebook</h2>

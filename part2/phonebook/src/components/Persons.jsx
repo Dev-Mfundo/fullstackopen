@@ -1,4 +1,5 @@
 const Persons=({filtered, handleDelete})=>{
+	if (!Array.isArray(filtered)) return null
 	return(
 	<>
 	{filtered.map((person)=>(
