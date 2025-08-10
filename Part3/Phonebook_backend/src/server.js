@@ -9,13 +9,25 @@ const app = express()
 app.use(express.json())
 dotenv.config()
 app.use(dotenv)
-const corsOrigin={
-	origin: "https://phonebook-frontend-gvjh.onrender.com",
-	methods: ["GET","POST","DELETE"],
-	credentials: false
+const allowedOrigin="https://phonebook-frontend-gvjh.onrender.com/"
+const corsOptions={
+  origin: allowedOrigin,
+  methods: ["GET", "POST", "DELETE"],
+  credentials: false
 }
 
-app.use(cors(corsOrigin))
+app.use(cors(corsOptions))
+
+app.use((req, res, next) => {
+  const origin = req.headers.origin
+
+  if (!origin || origin !== allowedOrigin) {
+    return res.status(403).json({ error: "Access denied" })
+  }
+
+  next()
+})
+
 
 app.use((req, res, next)=>{
   const originalSend = res.send
