@@ -9,14 +9,13 @@ const app = express()
 app.use(express.json())
 dotenv.config()
 app.use(dotenv)
-const allowedOrigin="https://phonebook-frontend-gvjh.onrender.com/"
+const allowedOrigin="https://phonebook-frontend-gvjh.onrender.com"
 const corsOptions={
   origin: allowedOrigin,
   methods: ["GET", "POST", "DELETE"],
   credentials: false
 }
 
-app.use(cors(corsOptions))
 
 app.use((req, res, next) => {
   const origin = req.headers.origin
@@ -28,6 +27,7 @@ app.use((req, res, next) => {
   next()
 })
 
+app.use(cors(corsOptions))
 
 app.use((req, res, next)=>{
   const originalSend = res.send
