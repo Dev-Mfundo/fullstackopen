@@ -9,6 +9,7 @@ dotenv.config()
 const app = express()
 app.use(express.json())
 
+app.use(express.static('dist'))
 
 const corsOrigin={
 	origin: "https://phonebook-frontend-gvjh.onrender.com",
