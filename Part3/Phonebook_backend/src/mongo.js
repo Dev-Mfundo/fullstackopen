@@ -8,11 +8,10 @@ const password = process.argv[2]
 
 const url = `mongodb+srv://new_user:${password}@cluster0.zoyfqlk.mongodb.net/phonebook?retryWrites=true&w=majority&appName=Cluster0`
 
-mongoose.set(strictQuery, false)
+mongoose.set('strictQuery', false)
 
 mongoose.connect(url)
-.then(()=>console.log('connected'))
-.catch(()=>console..log('Failed to connect to db'))
+.catch(()=>throw new Error('Failed to connect to db'))
 
 const personSchema = new mongoose.Schema({
   name:{
@@ -23,8 +22,8 @@ const personSchema = new mongoose.Schema({
   },
   number: {
     type: String,
-    minlength: 8
-    require: true
+    minlength: 8,
+    required: true
   }
 
 })
@@ -39,28 +38,12 @@ const person = new Person({
   number: personNumber
 })
 
+person.save().then(res=>{
+	console.log(`added ${personName} number ${personNumber} to phonebook`)
+})
 
-let persons =[
-    { 
-      "id": "1",
-      "name": "Arto Hellas", 
-      "number": "040-123456"
-    },
-    { 
-      "id": "2",
-      "name": "Ada Lovelace", 
-      "number": "39-44-5323523"
-    },
-    { 
-      "id": "3",
-      "name": "Dan Abramov", 
-      "number": "12-43-234345"
-    },
-    { 
-      "id": "4",
-      "name": "Mary Poppendieck", 
-      "number": "39-23-6423122"
-    }
-]
-
-module.exports={persons}
+Person.find({}).then((persons)=>{
+	console.log('phonebook:')
+	persons.forEach(person=>console.log(`${person.name} ${person.number}`))
+	mongoose.connection.close()
+})
