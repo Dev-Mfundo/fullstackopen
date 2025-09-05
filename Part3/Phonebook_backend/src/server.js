@@ -52,8 +52,8 @@ app.delete('/api/persons/:id',(req,res)=>{
 
 app.post('/api/persons',(req,res)=>{
 	const body = req.body
-	if(!body.name)return res.status(400).json({error: "name input required"})
-	if(!body.number)return res.status(400).json({error: "number input required"})
+	if(!body.name || body.name.length < 3)return res.status(400).json({error: "name input required of minimum of three characters"})
+	if(!body.number || body.number.length < 8)return res.status(400).json({error: "number input required of minimum of eight numbers"})
  
   Person.findOne({name: body.name}).then(checkExist=>{
 	if(checkExist)return res.status(409).json({ error: "name must be unique"})
