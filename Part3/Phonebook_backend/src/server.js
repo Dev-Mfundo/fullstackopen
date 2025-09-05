@@ -1,7 +1,7 @@
 const express = require('express')
 const morgan = require('morgan')
 const dotenv = require('dotenv')
-const {persons} = require('./db/persons')
+const {Person} = require('./models/persons')
 
 dotenv.config()
 
@@ -29,48 +29,47 @@ app.use(morgan(
 ))
 
 app.get('/api/persons',(req,res)=>{
-	if(!persons || persons.length === 0){
-		return res.status(404).json({error: "persons not found"})
-	}
-	res.status(200).json(persons)
+	Person.find({}).then(persons=>{
+		return res.status(200).json(persons)
+	}).catch(error=>res.status(404).json({error: 'Failed to retrieve phonebook'}))
 })
 
 app.get('/api/persons/:id',(req,res)=>{
 	const id = req.params.id
-	const person = persons.find(person=>person.id===id)
-	if(!person)return res.status(404).json({error: "person not found"})
-	res.status(200).json(person)
+	Person.findById(id).then(person=>{
+		return res.json(person)
+	}).catch(error=>res.status(404).json({error: "person not found"}))
+
 })
 
 app.delete('/api/persons/:id',(req,res)=>{
 	const id = req.params.id
-	const index = persons.findIndex(person=>person.id===id)
-	if(index === -1)return res.status(401).json({error: "failed to delete"})
-	persons.splice(index,1)
-	res.status(204).end()
+	Person.findByIdAndDelete(id).then(person=>{
+		return res.status(204).json(person)
+	}).catch(error=>res.status(401).json({error: "failed to delete"}))
 
 })
 
 app.post('/api/persons',(req,res)=>{
-	const randomId = Math.floor(Math.random()*1000)
-	const person = req.body
-	if(!person.name)return res.status(400).json({error: "name input required"})
-	if(!person.number)return res.status(400).json({error: "number input required"})
-
-    const checkExist= persons.some(p=>p.name === person.name)
+	const body = req.body
+	if(!body.name)return res.status(400).json({error: "name input required"})
+	if(!body.number)return res.status(400).json({error: "number input required"})
+ 
+  Person.findOne({name: body.name}).then(checkExist=>{
 	if(checkExist)return res.status(409).json({ error: "name must be unique"})
+	const person = new Person({
+		name: body.name,
+		number: body.number
+	})
 
-	const newPerson = {
-		id: String(randomId),
-		name: person.name,
-		number: person.number
-	}
-
-	persons.push(newPerson)
-	res.status(201).json(newPerson)
+  person.save().then((result)=>{
+  	return res.status(201).json(result)
+  }).catch(error=>res.status(401).json({error: 'Failed to add new note'}))
+})
 })
 
 app.get('/info',(req,res)=>{
+  Person.find({}).then(persons=>{
 	const numberOfPeople = persons.length
 	const currentDate = new Date()
 	const infoText=
@@ -78,6 +77,7 @@ app.get('/info',(req,res)=>{
 ${currentDate}`;
 	res.set('Content-Type', 'text/plain')
 	res.send(infoText)
+  })
 })
 
 
