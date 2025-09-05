@@ -28,26 +28,59 @@ app.use(morgan(
   ':method :url :status :res[content-length] - :response-time ms :res-body'
 ))
 
+
+
 app.get('/api/persons',(req,res)=>{
 	Person.find({}).then(persons=>{
 		return res.status(200).json(persons)
-	}).catch(error=>res.status(404).json({error: 'Failed to retrieve phonebook'}))
+	}).catch(error=>res.status(404).send({error: 'Failed to retrieve phonebook'}))
 })
 
-app.get('/api/persons/:id',(req,res)=>{
+const unknownEndPoints=(req, res)=>{
+	res.status(404).send({error: 'unknown endpoint'})
+}
+
+app.use(unknownEndPoints)
+
+const errorHandler=(error,req,res,next)=>{
+	console.log(error.message)
+	if(error.name === 'CastError'){
+		return res.status(400).json({error: 'malformatted id'})
+	}
+	next(error)
+}
+
+app.use(errorHandler)
+
+app.get('/api/persons/:id',(req,res, next)=>{
 	const id = req.params.id
 	Person.findById(id).then(person=>{
-		return res.json(person)
-	}).catch(error=>res.status(404).json({error: "person not found"}))
+		if(!person)return res.status(404).json({error: "person not found"})
+		else return res.json(person)
+	}).catch(error=>next(error))
+  
+})
+
+app.delete('/api/persons/:id',(req,res, next)=>{
+	const id = req.params.id
+	Person.findByIdAndDelete(id).then(person=>{
+		if(!person)return res.status(404).json({error: "person not found"})
+		else return res.status(204).json(person)
+	}).catch(error=>next(error))
 
 })
 
-app.delete('/api/persons/:id',(req,res)=>{
+app.put('/api/persons/:id', (res,req, next)=>{
+	const {name, number} = req.body
 	const id = req.params.id
-	Person.findByIdAndDelete(id).then(person=>{
-		return res.status(204).json(person)
-	}).catch(error=>res.status(401).json({error: "failed to delete"}))
-
+	Person.findByIdAndUpdate(id).then(person=>{
+		if(!person)return res.status(404).end()
+			person.name = name
+		  person.number = number
+		  person.save().then((updatedPerson)=>{
+		  	res.json(updatedPerson)
+		  })
+	}).catch(error=>next(error))
 })
 
 app.post('/api/persons',(req,res)=>{
@@ -79,6 +112,7 @@ ${currentDate}`;
 	res.send(infoText)
   })
 })
+
 
 
 
