@@ -54,7 +54,7 @@ app.delete('/api/persons/:id',(req,res, next)=>{
 
 })
 
-app.put('/api/persons/:id', (res,req, next)=>{
+app.put('/api/persons/:id', (req,res, next)=>{
 	const {name, number} = req.body
 	const id = req.params.id
 	Person.findByIdAndUpdate(id).then(person=>{
