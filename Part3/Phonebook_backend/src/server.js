@@ -36,22 +36,6 @@ app.get('/api/persons',(req,res)=>{
 	}).catch(error=>res.status(404).send({error: 'Failed to retrieve phonebook'}))
 })
 
-const unknownEndPoints=(req, res)=>{
-	res.status(404).send({error: 'unknown endpoint'})
-}
-
-app.use(unknownEndPoints)
-
-const errorHandler=(error,req,res,next)=>{
-	console.log(error.message)
-	if(error.name === 'CastError'){
-		return res.status(400).json({error: 'malformatted id'})
-	}
-	next(error)
-}
-
-app.use(errorHandler)
-
 app.get('/api/persons/:id',(req,res, next)=>{
 	const id = req.params.id
 	Person.findById(id).then(person=>{
@@ -65,7 +49,7 @@ app.delete('/api/persons/:id',(req,res, next)=>{
 	const id = req.params.id
 	Person.findByIdAndDelete(id).then(person=>{
 		if(!person)return res.status(404).json({error: "person not found"})
-		else return res.status(204).json(person)
+		else return res.status(204).end()
 	}).catch(error=>next(error))
 
 })
@@ -114,6 +98,21 @@ ${currentDate}`;
 })
 
 
+const unknownEndPoints=(req, res)=>{
+	res.status(404).send({error: 'unknown endpoint'})
+}
+
+app.use(unknownEndPoints)
+
+const errorHandler=(error,req,res,next)=>{
+	console.log(error.message)
+	if(error.name === 'CastError'){
+		return res.status(400).json({error: 'malformatted id'})
+	}
+	next(error)
+}
+
+app.use(errorHandler)
 
 
 const PORT = process.env.PORT || 3001
