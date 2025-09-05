@@ -52,7 +52,7 @@ app.delete('/api/persons/:id',(req,res)=>{
 
 app.post('/api/persons',(req,res)=>{
 	const body = req.body
-	if(!body.name || body.name.length < 3)return res.status(400).json({error: "name input required of minimum of three characters"})
+	if(!body.name || body.name.length < 3)return res.status(400).json({error: "name input required of minimum of three alphabets"})
 	if(!body.number || body.number.length < 8)return res.status(400).json({error: "number input required of minimum of eight numbers"})
  
   Person.findOne({name: body.name}).then(checkExist=>{
