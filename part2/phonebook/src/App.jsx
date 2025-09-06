@@ -16,9 +16,11 @@ const App = () => {
     phonebookServices
       .getAll()
       .then((initialPhonebook) => setPersons(initialPhonebook))
-      .catch(() => {
+      .catch((err) => {
         setPersons([])
+		if(err.response.status===404){
         setMessage({ error: "Failed to retrieve phonebook" })
+		}
       })
   }, [])
 
