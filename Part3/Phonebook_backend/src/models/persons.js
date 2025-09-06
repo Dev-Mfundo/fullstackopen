@@ -14,12 +14,14 @@ const personSchema = new mongoose.Schema({
     type: String,
     minlength: 3,
     required: true,
-    unique: true
+    unique: true,
+    validator: function(v){}
   },
   number: {
     type: String,
     minlength: 8,
-    required: true
+    required: true,
+    validator: function(v){}
   }
 
 })

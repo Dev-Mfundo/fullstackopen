@@ -20,7 +20,7 @@ const App = () => {
     .catch((err)=>{
       setPersons([])
       setMessage({
-        error: err.response.error
+        error: 'Failed to retrieve phonebook'
       })
     })
   },[])
@@ -74,7 +74,7 @@ const App = () => {
           })
           }else{
             setMessage({
-            error: err.response.data.error
+            error: err.res.data.error
 
           })
           }
@@ -103,7 +103,7 @@ const App = () => {
     })
     .catch(err=>{
       setMessage({
-        error: err.response.data.error
+        error: err.res.data.error
 
       })
       setNewName("")
