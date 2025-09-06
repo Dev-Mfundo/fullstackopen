@@ -30,7 +30,7 @@ app.use(morgan(
 
 
 
-app.get('/api/persons',(req,res, next)=>{
+app.get('/api/persons',(req,res)=>{
 	Person.find({}).then(persons=>{
 		return res.status(200).json(persons)
 	}).catch(error=>res.status(404).send({error: 'Failed to retrieve phonebook'}))
@@ -42,7 +42,7 @@ app.get('/api/persons/:id',(req,res, next)=>{
 		if(!person)return res.status(404).json({error: "person not found"})
 		else return res.json(person)
 	}).catch(error=>next(error))
-  
+
 })
 
 app.delete('/api/persons/:id',(req,res, next)=>{
@@ -67,8 +67,11 @@ app.put('/api/persons/:id', (req,res, next)=>{
 	}).catch(error=>next(error))
 })
 
-app.post('/api/persons',(req,res, next)=>{
+app.post('/api/persons',(req,res)=>{
 	const body = req.body
+	if(!body.name || body.name.length < 3)return res.status(400).json({error: "name input required of minimum of three alphabets"})
+	if(!body.number || body.number.length < 8)return res.status(400).json({error: "number input required of minimum of eight numbers"})
+
   Person.findOne({name: body.name}).then(checkExist=>{
 	if(checkExist)return res.status(409).json({ error: "name must be unique"})
 	const person = new Person({
@@ -78,7 +81,7 @@ app.post('/api/persons',(req,res, next)=>{
 
   person.save().then((result)=>{
   	return res.status(201).json(result)
-  }).catch(error=>next(error))
+  }).catch(error=>res.status(401).json({error: 'Failed to add new note'}))
 })
 })
 
@@ -105,9 +108,7 @@ const errorHandler=(error,req,res,next)=>{
 	console.log(error.message)
 	if(error.name === 'CastError'){
 		return res.status(400).json({error: 'malformatted id'})
-	}else if (error.name === 'ValidationError') {
-    return response.status(400).json({ error: error.message })
-  }
+	}
 	next(error)
 }
 
