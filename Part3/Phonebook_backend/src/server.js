@@ -67,10 +67,8 @@ app.put('/api/persons/:id', (req,res, next)=>{
 	}).catch(error=>next(error))
 })
 
-app.post('/api/persons',(req,res)=>{
+app.post('/api/persons',(req,res,next)=>{
 	const body = req.body
-	if(!body.name || body.name.length < 3)return res.status(400).json({error: "name input required of minimum of three alphabets"})
-	if(!body.number || body.number.length < 8)return res.status(400).json({error: "number input required of minimum of eight numbers"})
 
   Person.findOne({name: body.name}).then(checkExist=>{
 	if(checkExist)return res.status(409).json({ error: "name must be unique"})
@@ -81,8 +79,8 @@ app.post('/api/persons',(req,res)=>{
 
   person.save().then((result)=>{
   	return res.status(201).json(result)
-  }).catch(error=>res.status(401).json({error: 'Failed to add new note'}))
-})
+  }).catch(error=>next(error))
+}).catch(error=>next(error))
 })
 
 app.get('/info',(req,res)=>{
@@ -109,7 +107,7 @@ const errorHandler=(error,req,res,next)=>{
 	if(error.name === 'CastError'){
 		return res.status(400).json({error: 'malformatted id'})
 	}else if (error.name === 'ValidationError') {
-    return response.status(400).json({ error: error.message })
+    return res.status(400).json({ error: error.message })
   }
 	next(error)
 }

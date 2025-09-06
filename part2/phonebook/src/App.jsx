@@ -74,7 +74,8 @@ const App = () => {
           })
           }else{
             setMessage({
-            error: err.response.error
+            error: err.response.data.error
+
           })
           }
           setTimeout(()=>{
@@ -102,7 +103,8 @@ const App = () => {
     })
     .catch(err=>{
       setMessage({
-        error: err.response.error
+        error: err.response.data.error
+
       })
       setNewName("")
       setNewNumber("")
