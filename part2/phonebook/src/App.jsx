@@ -20,7 +20,7 @@ const App = () => {
     .catch((err)=>{
       setPersons([])
       setMessage({
-        error: 'Failed to get contacts'
+        error: err.response.data.error
       })
     })
   },[])
@@ -74,7 +74,7 @@ const App = () => {
           })
           }else{
             setMessage({
-            error:`Failed to update ${check.name}'s number`
+            err.response.data.error
           })
           }
           setTimeout(()=>{
@@ -102,7 +102,7 @@ const App = () => {
     })
     .catch(err=>{
       setMessage({
-        error:`Failed to add ${newPerson.name}`
+        err.response.data.error
       })
       setNewName("")
       setNewNumber("")
